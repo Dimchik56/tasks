@@ -1,0 +1,45 @@
+{% block content %}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+<script>
+    
+    $(document).ready(function(){
+        
+        setInterval(function(){
+            
+            $.ajax({
+                type:'GET',
+                url: "{% url 'gettasks' %}",
+                success: function(response){
+                    $("#display").empty();
+                    for (var key in response.tasks){
+                        let a = response.tasks[key].id
+                        var temp = "<li>"+"<a href='http://127.0.0.1:8000/"+`task/${a}'>`+response.tasks[key].titletask+"</a>"+"</li>";
+                        $("#display").append(temp);
+                    }
+                    console.log(response.tasks)
+                },
+                error: function(response){
+                   
+                }
+            });
+        },5000
+
+        );
+    });
+</script>
+
+current
+
+<ul id="display">
+    {% for task in tasks %}
+        <li>
+            <a href="{% url 'viewtask' task.id %}">
+                {% if task.importanttask %}<b>{% endif %}{{ task.titletask }}{% if task.importanttask %}</b>{% endif %}
+                {% if task.texttask %} - {{ task.texttask }}{% endif %}
+            </a>
+        </li>
+    {% endfor %}
+</ul>
+
+{% endblock %}
