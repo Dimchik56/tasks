@@ -1,31 +1,49 @@
 {% block content %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'task/style.css' %}"">
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 <script>
     
     $(document).ready(function(){
         
-        setInterval(function(){
-            
-            $.ajax({
+            const loadBtn = document.getElementById('load-btn')
+            const taskTitle = document.getElementsByClassName('.task-title')
+            const taskList = document.getElementById('display')
+            let visible = 3
+
+            const handleGetData = () => {
+                $.ajax({
                 type:'GET',
-                url: "{% url 'gettasks' %}",
+                url: `gettasks/${visible}`,
                 success: function(response){
-                    $("#display").empty();
-                    for (var key in response.tasks){
-                        let a = response.tasks[key].id
-                        var temp = "<li>"+"<a href='http://127.0.0.1:8000/"+`task/${a}'>`+response.tasks[key].titletask+"</a>"+"</li>";
-                        $("#display").append(temp);
-                    }
-                    console.log(response.tasks)
+                    const data = response.data
+                    data.map(post=>{
+                        console.log(post.titletask)
+                        taskList.innerHTML += `<div class="display__element">
+                                <p class="display__element-id">${post.id}</p>""
+                                <p class="display__element-title">${post.titletask}</p>""
+                                <p class="display__element-id">${post.datecreatedtask}</p>""
+                                <p class="display__element-id">${post.importanttask}</p>""
+                                <p class="display__element-id">${post.user}</p>
+                            </div>`
+                    })
                 },
                 error: function(response){
                    
                 }
             });
-        },5000
-
-        );
+            }
+            
+            $(document).ready(function(){
+                handleGetData()
+            })
+        
+            loadBtn.addEventListener('click', ()=>{
+                visible += 3
+                handleGetData()
+            })
+        
     });
 </script>
 
@@ -34,12 +52,14 @@ current
 <ul id="display">
     {% for task in tasks %}
         <li>
-            <a href="{% url 'viewtask' task.id %}">
+            <a href="{% url 'viewtask' task.id %}" class="task-title">
                 {% if task.importanttask %}<b>{% endif %}{{ task.titletask }}{% if task.importanttask %}</b>{% endif %}
                 {% if task.texttask %} - {{ task.texttask }}{% endif %}
             </a>
         </li>
     {% endfor %}
 </ul>
+<button id="load-btn">Добавить</button>
+
 
 {% endblock %}

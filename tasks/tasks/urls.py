@@ -30,5 +30,5 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('current/', views.currenttasks, name='currenttasks'),
     path('task/<int:task_id>', views.viewtask, name='viewtask'),
-    path('gettasks/', views.gettasks, name='gettasks'),
+    path('current/gettasks/<int:num_posts>/', views.gettasks, name='gettasks'),
 ]
