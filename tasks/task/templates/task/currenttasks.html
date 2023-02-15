@@ -1,6 +1,6 @@
 {% block content %}
 {% load static %}
-<link rel="stylesheet" href="{% static 'task/style.css' %}"">
+<link rel="stylesheet" href="{% static 'task/style.css' %}">
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 <script>
@@ -10,39 +10,43 @@
             const loadBtn = document.getElementById('load-btn')
             const taskTitle = document.getElementsByClassName('.task-title')
             const taskList = document.getElementById('display')
-            let visible = 3
-
+            let visible = document.getElementById('task-len').innerText
+            
             const handleGetData = () => {
                 $.ajax({
-                type:'GET',
-                url: `gettasks/${visible}`,
-                success: function(response){
-                    const data = response.data
+                    type:'GET',
+                    url: `gettasks/${visible}`,
+                    success: function(response){
+                        const data = response.data
+                        console.log(data)
+                        data.reverse()
+                        data.map(post=>{
+                            const date = new Date(post.datecreatedtask)
+                            let li = document.createElement('li')
+                            li.innerHTML += `<div class="display">
+                                    <p class="display__element-id element-id element">${post.id}</p>
+                                    <p class="display__element-title element-title element">${post.titletask}</p>
+                                    <p class="display__element-datecreated element-datecreated element">${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}</p>
+                                    <p class="display__element-important element-important element">${post.importanttask}</p>
+                                    <p class="display__element-user element-user element">${post.user}</p>
+                                </div>`
+                            taskList.append(li)
+                        })
+                    },
+                    error: function(response){
                     
-                    data.map(post=>{
-                        const date = new Date(post.datecreatedtask)
-                        console.log(date.toDateString())
-                        taskList.innerHTML += `<div class="display">
-                                <p class="display__element-id element-id element">${post.id}</p>
-                                <p class="display__element-title element-title element">${post.titletask}</p>
-                                <p class="display__element-datecreated element-datecreated element">${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}</p>
-                                <p class="display__element-important element-important element">${post.importanttask}</p>
-                                <p class="display__element-user element-user element">${post.user}</p>
-                            </div>`
-                    })
-                },
-                error: function(response){
-                   
-                }
-            });
+                    }
+                });
+                
             }
-            
+
+    
             $(document).ready(function(){
                 handleGetData()
             })
         
             loadBtn.addEventListener('click', ()=>{
-                visible += 3
+                visible -= 3
                 handleGetData()
             })
         
@@ -50,7 +54,7 @@
 </script>
 
 current
-
+<p id="task-len">{{ len }}</p><p>заданий</p>
 <ul id="display">
     <li class="display">
         <p class="display__element-id element-id element">id</p>
@@ -59,14 +63,6 @@ current
         <p class="display__element-important element-important element">Важность</p>
         <p class="display__element-user element-user element">Имя пользователя</p>
     </li>
-    {% for task in tasks %}
-        <li>
-            <a href="{% url 'viewtask' task.id %}" class="task-title">
-                {% if task.importanttask %}<b>{% endif %}{{ task.titletask }}{% if task.importanttask %}</b>{% endif %}
-                {% if task.texttask %} - {{ task.texttask }}{% endif %}
-            </a>
-        </li>
-    {% endfor %}
 </ul>
 <button id="load-btn">Добавить</button>
 

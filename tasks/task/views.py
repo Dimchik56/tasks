@@ -6,8 +6,6 @@ from django.db import IntegrityError
 from django.http import JsonResponse
 from .models import Task
 
-a = 5
-
 def home(request):
     return render(request, 'task/home.html')
 
@@ -27,14 +25,17 @@ def signupuser(request):
             return render(request, 'task/signupuser.html', {'form':UserCreationForm(), 'error':'Passwords did not match!'})
 
 def currenttasks(request):
-    return render(request, 'task/currenttasks.html')
+    arrayLen = len(Task.objects.all())
+    return render(request, 'task/currenttasks.html', {'len': arrayLen})
 
 def gettasks(request, **kwargs):
     print(kwargs)
     upper = kwargs.get('num_posts')
     lower = upper - 3
     posts = list(Task.objects.values()[lower:upper])
-    return JsonResponse({'data': posts}, safe=False)
+    return JsonResponse({'data': posts},  safe=False)
+
+
 
 def viewtask(request, task_id):
     task = get_object_or_404(Task, pk=task_id)
