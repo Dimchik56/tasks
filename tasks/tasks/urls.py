@@ -31,5 +31,5 @@ urlpatterns = [
     path('current/', views.currenttasks, name='currenttasks'),
     path('task/<int:task_id>', views.viewtask, name='viewtask'),
     path('current/gettasks/<int:num_posts>/', views.gettasks, name='gettasks'),
-    #path('current/arraylength', views.arraylength, name='arraylength'),
+    path('current/getNewTask', views.getNewTask, name='getNewTask'),
 ]

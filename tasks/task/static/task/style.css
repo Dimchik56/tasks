@@ -1,7 +1,11 @@
+#display{
+    list-style-type: none;
+}
+
 .display{
     display: flex;
 }
 
 .element{
-    margin: 20px 10%;
+    margin: 10px 10%;
 }

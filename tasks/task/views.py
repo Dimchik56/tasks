@@ -6,6 +6,7 @@ from django.db import IntegrityError
 from django.http import JsonResponse
 from .models import Task
 
+
 def home(request):
     return render(request, 'task/home.html')
 
@@ -30,14 +31,16 @@ def currenttasks(request):
 
 def gettasks(request, **kwargs):
     print(kwargs)
-    upper = kwargs.get('num_posts')
+    upper = kwargs.get ('num_posts')
     lower = upper - 3
     posts = list(Task.objects.values()[lower:upper])
     return JsonResponse({'data': posts},  safe=False)
 
-
+def getNewTask(request):
+    queryset = Task.objects.all()[len(Task.objects.all()) - 1:len(Task.objects.all())]
+    return JsonResponse({"newTask":list(queryset.values())})
 
 def viewtask(request, task_id):
     task = get_object_or_404(Task, pk=task_id)
     if request.method == 'GET':
-        return render(request, 'task/viewtask.html', {'task':task,})
+        return render(request, 'task/viewtask.html', {'task':task})
