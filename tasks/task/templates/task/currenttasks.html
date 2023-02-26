@@ -11,6 +11,7 @@
         const taskTitle = document.getElementsByClassName('.task-title')
         const taskList = document.getElementById('display')
         let visible = document.getElementById('task-len').innerText
+        let numberTask = Number(document.getElementById('task-len').innerText)
         
         const handleGetData = () => {
             $.ajax({
@@ -18,7 +19,6 @@
                 url: `gettasks/${visible}`,
                 success: function(response){
                     const data = response.data
-                    console.log(data)
                     data.reverse()
                     data.map(post=>{
                         const date = new Date(post.datecreatedtask)
@@ -51,10 +51,31 @@
         setInterval(function(){
             $.ajax({
                 type:'GET',
-                url: "{% url 'getNewTask' %}",
+                url: `getNewTask/${Number(numberTask)}`,
                 success: function(response){
-                    console.log(response.newTask.titletask)
+                    console.log(response.newTask.length)
+                    if (response.newTask.length == 1){
+                        const data = response.newTask
+                        data.map(post=>{
+                        const date = new Date(post.datecreatedtask)
+                        let li = document.createElement('li')
+                        li.innerHTML += `<div class="display">
+                                <p class="display__element-id element-id element">${post.id}</p>
+                                <p class="display__element-title element-title element">${post.titletask}</p>
+                                <p class="display__element-datecreated element-datecreated element">${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}</p>
+                                <p class="display__element-important element-important element">${post.importanttask}</p>
+                                <p class="display__element-user element-user element">${post.user}</p>
+                            </div>`
+                        taskList.prepend(li)
+                        })
+                        numberTask += 1
+                    }
+                    
+                },
+                error: function(response){
+                    console.log('Изменений нет!')
                 }
+                
             })
         },5000)
         
@@ -63,7 +84,7 @@
 
 current
 <p id="task-len">{{ len }}</p><p>заданий</p>
-<ul id="display">
+<ul id="display_for_title">
     <li class="display">
         <p class="display__element-id element-id element">id</p>
         <p class="display__element-title element-title element">Заголовок</p>
@@ -71,6 +92,9 @@ current
         <p class="display__element-important element-important element">Важность</p>
         <p class="display__element-user element-user element">Имя пользователя</p>
     </li>
+</ul>
+<ul id="display">
+    
 </ul>
 <button id="load-btn">Добавить</button>
 

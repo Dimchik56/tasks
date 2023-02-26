@@ -36,9 +36,11 @@ def gettasks(request, **kwargs):
     posts = list(Task.objects.values()[lower:upper])
     return JsonResponse({'data': posts},  safe=False)
 
-def getNewTask(request):
-    queryset = Task.objects.all()[len(Task.objects.all()) - 1:len(Task.objects.all())]
-    return JsonResponse({"newTask":list(queryset.values())})
+def getNewTask(request, **kwargs):
+    print(kwargs)
+    lastPost = kwargs.get ('new_task')
+    queryset = list(Task.objects.values()[lastPost: ])
+    return JsonResponse({"newTask":queryset}, safe=False)
 
 def viewtask(request, task_id):
     task = get_object_or_404(Task, pk=task_id)
