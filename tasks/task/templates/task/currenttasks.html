@@ -1,5 +1,6 @@
 {% block content %}
 {% load static %}
+{{ user.username }}
 <link rel="stylesheet" href="{% static 'task/style.css' %}">
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
@@ -18,6 +19,7 @@
                 type:'GET',
                 url: `gettasks/${visible}`,
                 success: function(response){
+                    console.log(response.users)
                     const data = response.data
                     data.reverse()
                     data.map(post=>{
@@ -28,7 +30,7 @@
                                 <p class="display__element-title element-title element">${post.titletask}</p>
                                 <p class="display__element-datecreated element-datecreated element">${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}</p>
                                 <p class="display__element-important element-important element">${post.importanttask}</p>
-                                <p class="display__element-user element-user element">${post.user}</p>
+                                <p class="display__element-user element-user element">${post.username}</p>
                             </div>`
                         taskList.append(li)
                     })
@@ -53,7 +55,7 @@
                 type:'GET',
                 url: `getNewTask/${Number(numberTask)}`,
                 success: function(response){
-                    console.log(response.newTask.length)
+                    console.log(response.newTask)
                     if (response.newTask.length == 1){
                         const data = response.newTask
                         data.map(post=>{
@@ -64,7 +66,7 @@
                                 <p class="display__element-title element-title element">${post.titletask}</p>
                                 <p class="display__element-datecreated element-datecreated element">${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}</p>
                                 <p class="display__element-important element-important element">${post.importanttask}</p>
-                                <p class="display__element-user element-user element">${post.user}</p>
+                                <p class="display__element-user element-user element">${post.user_id}</p>
                             </div>`
                         taskList.prepend(li)
                         })
@@ -83,7 +85,7 @@
 </script>
 
 current
-<p id="task-len">{{ len }}</p><p>заданий</p>
+<p>Сейчас тут<p id="task-len">{{ len }}</p>заданий</p>
 <ul id="display_for_title">
     <li class="display">
         <p class="display__element-id element-id element">id</p>
