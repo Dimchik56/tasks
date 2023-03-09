@@ -1,0 +1,104 @@
+{% block content %}
+{% load static %}
+{{ user.username }}
+<link rel="stylesheet" href="{% static 'task/style.css' %}">
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+<script>
+    
+    $(document).ready(function(){
+        
+        const loadBtn = document.getElementById('load-btn')
+        const taskTitle = document.getElementsByClassName('.task-title')
+        const taskList = document.getElementById('display')
+        let visible = document.getElementById('task-len').innerText
+        let numberTask = Number(document.getElementById('task-len').innerText)
+        
+        const handleGetData = () => {
+            $.ajax({
+                type:'GET',
+                url: `gettasks/${visible}`,
+                success: function(response){
+                    console.log(response.users)
+                    const data = response.data
+                    data.reverse()
+                    data.map(post=>{
+                        const date = new Date(post.datecreatedtask)
+                        let li = document.createElement('li')
+                        li.innerHTML += `<div class="display">
+                                <p class="display__element-id element-id element">${post.id}</p>
+                                <p class="display__element-title element-title element">${post.titletask}</p>
+                                <p class="display__element-datecreated element-datecreated element">${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}</p>
+                                <p class="display__element-important element-important element">${post.importanttask}</p>
+                                <p class="display__element-user element-user element">${post.username}</p>
+                            </div>`
+                        taskList.append(li)
+                    })
+                },
+                error: function(response){
+                
+                }
+            });  
+        }
+
+        $(document).ready(function(){
+            handleGetData()
+        })
+    
+        loadBtn.addEventListener('click', ()=>{
+            visible -= 3
+            handleGetData()
+        })
+
+        setInterval(function(){
+            $.ajax({
+                type:'GET',
+                url: `getNewTask/${Number(numberTask)}`,
+                success: function(response){
+                    console.log(response.newTask)
+                    if (response.newTask.length == 1){
+                        const data = response.newTask
+                        data.map(post=>{
+                        const date = new Date(post.datecreatedtask)
+                        let li = document.createElement('li')
+                        li.innerHTML += `<div class="display">
+                                <p class="display__element-id element-id element">${post.id}</p>
+                                <p class="display__element-title element-title element">${post.titletask}</p>
+                                <p class="display__element-datecreated element-datecreated element">${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}</p>
+                                <p class="display__element-important element-important element">${post.importanttask}</p>
+                                <p class="display__element-user element-user element">${post.username}</p>
+                            </div>`
+                        taskList.prepend(li)
+                        })
+                        numberTask += 1
+                    }
+                    
+                },
+                error: function(response){
+                    console.log('Изменений нет!')
+                }
+                
+            })
+        },5000)
+        
+    });
+</script>
+
+current
+<p>Сейчас тут<p id="task-len">{{ len }}</p>заданий</p>
+<ul id="display_for_title">
+    <li class="display">
+        <p class="display__element-id element-id element">id</p>
+        <p class="display__element-title element-title element">Заголовок</p>
+        <p class="display__element-datecreated element-datecreated element">Дата&nbspсоздания</p>
+        <p class="display__element-important element-important element">Важность</p>
+        <p class="display__element-user element-user element">Имя пользователя</p>
+    </li>
+</ul>
+<ul id="display">
+    
+</ul>
+<button id="load-btn">Добавить</button>
+
+
+{% endblock %}
