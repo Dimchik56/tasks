@@ -2,6 +2,10 @@
     list-style-type: none;
 }
 
+#display_for_title{
+    list-style-type: none;
+}
+
 .display{
     display: flex;
 }

@@ -25,11 +25,11 @@ urlpatterns = [
     #Auth
     path('signup/', views.signupuser, name='signupuser'),
     
-
     #tasks manager
     path('', views.home, name='home'),
     path('current/', views.currenttasks, name='currenttasks'),
+    path('create/', views.createtasks, name='createtasks'),
     path('task/<int:task_id>', views.viewtask, name='viewtask'),
     path('current/gettasks/<int:num_posts>/', views.gettasks, name='gettasks'),
-    path('current/getNewTask', views.getNewTask, name='getNewTask'),
+    path('current/getNewTask/<int:new_task>/', views.getNewTask, name='getNewTask'),
 ]
