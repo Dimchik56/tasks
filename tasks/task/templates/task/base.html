@@ -1,0 +1,32 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'task/style.css' %}">
+{% if user.is_authenticated %}
+
+<div class="base-line">
+    {{ user.username }}
+    <p class="base-button"><a href="{% url 'currenttasks' %}">К задачам</a></p>
+    <p class="base-button"><a href="{% url 'createtasks' %}">Создать задачу</a></p>
+
+    <form action="{% url 'searchTasks' %}" method="get">
+        {% csrf_token %}
+        <input type="search" placeholder="Search" aria-label="search" name="search">
+        <button type="submit">Search</button>
+    </form>
+
+    <form action="{% url 'logoutuser' %}" method="POST">
+        {% csrf_token %}
+        <button type="submit">Logout</button>
+    </form>
+</div>
+
+{% else %}
+<div class="base-line">
+    <p class="base-button"><a href="{% url 'signupuser' %}">Регистрация</a></p>
+    <p class="base-button"><a href="{% url 'loginuser' %}">Вход</a></p>
+</div>
+
+{% endif %}
+
+
+
+{% block content %}{% endblock %}

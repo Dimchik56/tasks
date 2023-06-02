@@ -11,5 +11,37 @@
 }
 
 .element{
-    margin: 10px 10%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.element-id{
+    width: 30px;
+}
+
+.element-title{
+    min-width: 100px;
+    max-width: 170px;
+}
+
+.element-datecreated{
+    width: 120px;
+}
+
+.element-important{
+    width: 100px;
+}
+
+.element-user{
+    min-width: 100px;
+    max-width: 170px;
+}
+
+.base-line{
+    width: 100%;
+    background-color: chocolate;
+}
+
+.base-button{
+    margin-left: 5px;
 }

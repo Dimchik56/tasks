@@ -1,1 +1,10 @@
+{% extends 'task/base.html' %}
+{% block content %}
 <h1>{{ task.titletask }}</h1>
+<form method="POST" action="{% url 'completetask' task.id %}">
+    {% csrf_token %}
+    {% if user.is_superuser %}
+    <button type="submit">Complete</button>
+    {% endif %}
+</form>
+{% endblock %}

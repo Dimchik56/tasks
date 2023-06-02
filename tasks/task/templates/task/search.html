@@ -1,0 +1,29 @@
+{% extends 'task/base.html' %}
+{% block content %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'task/style.css' %}">
+
+<ul id="display_for_title">
+    <li class="display">
+        <p class="display__element-id element-id element">id</p>
+        <p class="display__element-title element-title element">Заголовок</p>
+        <p class="display__element-datecreated element-datecreated element">Дата&nbspсоздания</p>
+        <p class="display__element-important element-important element">Важность</p>
+        <p class="display__element-user element-user element">Имя пользователя</p>
+    </li>
+</ul>
+
+<ul id="display">
+    {% for task in tasks %}
+    <li>
+        <div class="display">
+            <p class="display__element-id element-id element">{{task.id}}</p>
+            <a href="{% url 'viewtask' task.id %}"><p class="display__element-title element-title element">{{task.titletask}}</p></a>
+            <p class="display__element-datecreated element-datecreated element">{{task.datecreatedtask|date:'d m Y'}}</p>
+            <p class="display__element-important element-important element">{{task.importanttask}}</p>
+            <p class="display__element-user element-user element">{{task.user}}</p>
+        </div>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}
